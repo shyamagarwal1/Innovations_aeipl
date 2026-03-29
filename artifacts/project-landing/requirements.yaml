@@ -1,0 +1,17 @@
+packages:
+  "framer-motion": "For premium smooth scroll animations and entry effects"
+  "react-hook-form": "For robust contact form state management"
+  "@hookform/resolvers": "For Zod validation integration with the contact form"
+  "zod": "For form validation schema"
+
+images:
+  - path: "artifacts/project-landing/public/images/hero-bg.png"
+    description: "Abstract modern technology background with deep blue and vibrant orange light streaks, glowing data lines, dark atmospheric depth of field, premium tech aesthetic"
+    aspect_ratio: "16:9"
+  - path: "artifacts/project-landing/public/images/robotics.png"
+    description: "Close up of a sleek modern robotic arm or circuit board with glowing orange accents on a dark background, high quality 3d render"
+    aspect_ratio: "4:3"
+
+notes:
+  - The contact form is strictly frontend-only for lead capture demonstration; it simulates a network request and shows a success toast.
+  - Smooth scrolling is enabled via CSS.
