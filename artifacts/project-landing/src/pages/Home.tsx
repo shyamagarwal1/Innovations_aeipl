@@ -156,10 +156,12 @@ export default function Home() {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-glass border-b border-white/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-orange-400 flex items-center justify-center shadow-lg shadow-primary/20">
-              <Cpu className="w-6 h-6 text-white" />
-            </div>
-            <div className="leading-tight">
+            <img
+              src={`${import.meta.env.BASE_URL}images/logo-main.jpeg`}
+              alt="AEIPL Logo"
+              className="h-12 w-auto object-contain rounded-lg"
+            />
+            <div className="leading-tight hidden sm:block">
               <span className="font-display font-extrabold text-base text-white tracking-tight block">
                 AE<span className="text-primary">I</span>PL
               </span>
@@ -482,13 +484,13 @@ export default function Home() {
             </p>
 
             <div className="space-y-4 mb-8">
-              <a href="tel:+917287871910" className="flex items-center gap-4 group">
+              <a href="tel:+919494040947" className="flex items-center gap-4 group">
                 <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0 group-hover:bg-primary/20 transition-colors">
                   <Phone className="w-5 h-5 text-primary" />
                 </div>
                 <div>
                   <p className="text-xs text-muted-foreground uppercase tracking-wider">Call Us</p>
-                  <p className="text-white font-semibold">+91 72878 71910 / +91 70326 70278</p>
+                  <p className="text-white font-semibold">+91 94940 40947 / +91 70326 70278</p>
                 </div>
               </a>
               <a href="mailto:ad.officials07@gmail.com" className="flex items-center gap-4 group">
@@ -506,7 +508,7 @@ export default function Home() {
                 </div>
                 <div>
                   <p className="text-xs text-muted-foreground uppercase tracking-wider">Location</p>
-                  <p className="text-white font-semibold text-sm">Sree Enclaves, Flat 401, Lalitha Nagar,<br />Akkayapalem, Visakhapatnam — 530016, AP</p>
+                  <p className="text-white font-semibold text-sm">Visakhapatnam, Andhra Pradesh, India — 530016</p>
                 </div>
               </div>
               <a href="https://adoofficial.blogspot.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 group">
@@ -688,19 +690,23 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-8">
             <div>
-              <div className="flex items-center gap-3 mb-2">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-orange-400 flex items-center justify-center">
-                  <Cpu className="w-5 h-5 text-white" />
+              <div className="flex items-center gap-4 mb-2">
+                <img
+                  src={`${import.meta.env.BASE_URL}images/logo-round.jpeg`}
+                  alt="AEIPL Round Logo"
+                  className="h-14 w-14 object-contain rounded-full border border-white/10"
+                />
+                <div>
+                  <span className="font-display font-extrabold text-base text-white block">
+                    Agarwal Exploration & Innovation Pvt Ltd
+                  </span>
+                  <p className="text-xs text-muted-foreground italic">"Where Ideas soar Innovations roar"</p>
                 </div>
-                <span className="font-display font-extrabold text-lg text-white">
-                  Agarwal Exploration & Innovation Pvt Ltd
-                </span>
               </div>
-              <p className="text-sm text-muted-foreground italic">"Where Ideas soar Innovations roar"</p>
             </div>
             <div className="text-center md:text-right text-sm text-muted-foreground space-y-1">
-              <p>Visakhapatnam, Andhra Pradesh — 530016</p>
-              <p>+91 72878 71910 &nbsp;|&nbsp; +91 70326 70278</p>
+              <p>Visakhapatnam, Andhra Pradesh, India — 530016</p>
+              <p>+91 94940 40947 &nbsp;|&nbsp; +91 70326 70278</p>
               <p>ad.officials07@gmail.com</p>
               <p className="mt-2">© {new Date().getFullYear()} AEIPL. All rights reserved.</p>
             </div>
