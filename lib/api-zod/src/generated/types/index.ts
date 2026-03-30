@@ -6,4 +6,11 @@
  * OpenAPI spec version: 0.1.0
  */
 
+export * from "./contactRequest";
+export * from "./contactRequestServiceType";
+export * from "./contactResponse";
+export * from "./errorResponse";
+export * from "./getSubmissionsParams";
 export * from "./healthStatus";
+export * from "./submission";
+export * from "./submissionsResponse";

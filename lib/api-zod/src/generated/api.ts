@@ -14,3 +14,44 @@ import * as zod from "zod";
 export const HealthCheckResponse = zod.object({
   status: zod.string(),
 });
+
+/**
+ * @summary Submit a contact enquiry
+ */
+export const SubmitContactBody = zod.object({
+  name: zod.string(),
+  phone: zod.string(),
+  email: zod.string(),
+  college: zod.string(),
+  projectType: zod.string(),
+  serviceType: zod.enum([
+    "project_only",
+    "project_internship",
+    "internship_only",
+  ]),
+  message: zod.string().optional(),
+});
+
+/**
+ * @summary Get all contact submissions (admin only)
+ */
+export const GetSubmissionsQueryParams = zod.object({
+  password: zod.coerce.string(),
+});
+
+export const GetSubmissionsResponse = zod.object({
+  submissions: zod.array(
+    zod.object({
+      id: zod.number(),
+      name: zod.string(),
+      phone: zod.string(),
+      email: zod.string(),
+      college: zod.string(),
+      projectType: zod.string(),
+      serviceType: zod.string(),
+      message: zod.string().optional(),
+      createdAt: zod.coerce.date(),
+    }),
+  ),
+  total: zod.number(),
+});

@@ -48,6 +48,18 @@ Every package extends `tsconfig.base.json` which sets `composite: true`. The roo
 - `pnpm run build` — runs `typecheck` first, then recursively runs `build` in all packages that define it
 - `pnpm run typecheck` — runs `tsc --build --emitDeclarationOnly` using project references
 
+## AEIPL Landing Page
+
+**Company**: Agarwal Exploration & Innovation Pvt Ltd (AEIPL)
+**Landing Page**: `artifacts/project-landing` — React + Vite one-page website at `/`
+**Admin Panel**: Visit `/admin` — password: `aeipl@admin2024` (set `ADMIN_PASSWORD` env var to change)
+**Contact API**: `POST /api/contact` — saves enquiries to PostgreSQL
+**Admin API**: `GET /api/admin/submissions?password=<pwd>` — returns all enquiries
+
+### Database
+- Table: `contact_submissions` — stores all form enquiries
+- Fields: name, phone, email, college, projectType, serviceType, message, createdAt
+
 ## Packages
 
 ### `artifacts/api-server` (`@workspace/api-server`)

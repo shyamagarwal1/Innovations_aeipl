@@ -8,3 +8,53 @@
 export interface HealthStatus {
   status: string;
 }
+
+export type ContactRequestServiceType =
+  (typeof ContactRequestServiceType)[keyof typeof ContactRequestServiceType];
+
+export const ContactRequestServiceType = {
+  project_only: "project_only",
+  project_internship: "project_internship",
+  internship_only: "internship_only",
+} as const;
+
+export interface ContactRequest {
+  name: string;
+  phone: string;
+  email: string;
+  college: string;
+  projectType: string;
+  serviceType: ContactRequestServiceType;
+  message?: string;
+}
+
+export interface ContactResponse {
+  success: boolean;
+  message: string;
+  id: number;
+}
+
+export interface Submission {
+  id: number;
+  name: string;
+  phone: string;
+  email: string;
+  college: string;
+  projectType: string;
+  serviceType: string;
+  message?: string;
+  createdAt: string;
+}
+
+export interface SubmissionsResponse {
+  submissions: Submission[];
+  total: number;
+}
+
+export interface ErrorResponse {
+  error: string;
+}
+
+export type GetSubmissionsParams = {
+  password: string;
+};
