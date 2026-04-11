@@ -102,6 +102,15 @@ const serviceOptions = [
     activeColor: "border-green-500 bg-green-500/20",
     badge: "",
   },
+  {
+    value: "industrial_course",
+    label: "Industrial Course",
+    desc: "Enroll in a domain-specific course taught by industry experts — with hands-on labs and a completion certificate.",
+    icon: <CloudCog className="w-6 h-6" />,
+    color: "border-orange-500/40 bg-orange-500/5 hover:border-orange-500 hover:bg-orange-500/10",
+    activeColor: "border-orange-500 bg-orange-500/20",
+    badge: "New",
+  },
 ];
 
 export default function Home() {
@@ -175,6 +184,7 @@ export default function Home() {
           </div>
 
           <div className="hidden md:flex items-center gap-8">
+            <a href="#offerings" className="text-sm font-medium text-muted-foreground hover:text-white transition-colors">Offerings</a>
             <a href="#about" className="text-sm font-medium text-muted-foreground hover:text-white transition-colors">About</a>
             <a href="#domains" className="text-sm font-medium text-muted-foreground hover:text-white transition-colors">Domains</a>
             <a href="#offers" className="text-sm font-medium text-primary flex items-center gap-1 animate-pulse">
@@ -202,8 +212,8 @@ export default function Home() {
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-semibold mb-8">
-              <Zap className="w-4 h-4" /> Final Year Project Bookings Open — Limited Slots!
+            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-semibold mb-8">
+              <Zap className="w-4 h-4" /> Now Enrolling — Projects · Internships · Industrial Courses
             </div>
 
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-display font-extrabold text-white leading-tight mb-4">
@@ -215,13 +225,12 @@ export default function Home() {
               Build. Code. Innovate. Transforming Tomorrow, Today.
             </p>
             <p className="text-base md:text-xl text-white/60 max-w-2xl mx-auto mb-10">
-              Don't just submit a project to pass.{" "}
-              <span className="text-white font-semibold">Submit a statement.</span>
+              From hands-on <span className="text-white font-semibold">projects</span> to domain <span className="text-white font-semibold">courses</span> and <span className="text-white font-semibold">internships</span> — everything under one roof.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button asChild size="lg" className="h-14 px-8 text-lg rounded-full bg-primary hover:bg-primary/90 text-white shadow-[0_0_30px_rgba(249,115,22,0.3)] hover:shadow-[0_0_40px_rgba(249,115,22,0.5)] transition-all hover:-translate-y-1">
-                <a href="#domains">Browse Domains <ArrowRight className="ml-2 w-5 h-5" /></a>
+                <a href="#offerings">Explore Offerings <ArrowRight className="ml-2 w-5 h-5" /></a>
               </Button>
               <Button asChild size="lg" variant="outline" className="h-14 px-8 text-lg rounded-full border-white/20 hover:bg-white/5">
                 <a href="#contact">Get Free Consultation</a>
@@ -249,6 +258,89 @@ export default function Home() {
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">{f.title}</h3>
                 <p className="text-muted-foreground text-sm">{f.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* What We Offer */}
+      <section id="offerings" className="py-24 bg-background">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-5xl font-display font-bold text-white mb-4">
+              What We Offer 🎓
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Three powerful pathways — pick one or combine them all for maximum growth.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                icon: <BookOpen className="w-10 h-10 text-primary" />,
+                title: "Final Year Projects",
+                badge: "Most Popular",
+                badgeColor: "bg-primary text-white",
+                desc: "Hardware & software projects across all major domains — Embedded, IoT, Robotics, AI/ML, Python, Django, Full Stack, and more. Delivered with complete documentation, source code, and demo video.",
+                points: ["IEEE-quality documentation", "Full source code included", "7–21 day delivery", "Domain expert mentorship"],
+                href: "#contact",
+                cta: "Enquire for Project",
+                border: "border-primary/30",
+              },
+              {
+                icon: <GraduationCap className="w-10 h-10 text-orange-400" />,
+                title: "Industrial Courses",
+                badge: "New",
+                badgeColor: "bg-orange-500 text-white",
+                desc: "Domain-specific training programs taught by industry professionals. Learn Embedded Systems, IoT, Python, AI/ML, Ethical Hacking, Cloud, and more — with hands-on labs and a course completion certificate.",
+                points: ["Hands-on lab sessions", "Industry-expert trainers", "Course completion certificate", "Flexible batch timings"],
+                href: "#contact",
+                cta: "Enroll for a Course",
+                border: "border-orange-500/30",
+              },
+              {
+                icon: <Briefcase className="w-10 h-10 text-blue-400" />,
+                title: "Internships",
+                badge: "",
+                badgeColor: "",
+                desc: "Industrial internship programs in your chosen domain. Work on real projects, learn industry tools, and earn a valid internship certificate that boosts your resume and placement prospects.",
+                points: ["Virtual & in-person options", "Real project exposure", "Internship certificate", "Available all year round"],
+                href: "#contact",
+                cta: "Apply for Internship",
+                border: "border-blue-500/20",
+              },
+            ].map((item, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.1 }}
+                className={`relative bg-glass-card rounded-3xl border-2 ${item.border} p-8 flex flex-col hover-glow`}
+              >
+                {item.badge && (
+                  <span className={`absolute -top-3 left-8 px-3 py-1 rounded-full text-xs font-bold shadow-lg ${item.badgeColor}`}>
+                    {item.badge}
+                  </span>
+                )}
+                <div className="w-16 h-16 rounded-2xl bg-background/60 border border-white/10 flex items-center justify-center mb-5">
+                  {item.icon}
+                </div>
+                <h3 className="text-xl font-bold text-white mb-3">{item.title}</h3>
+                <p className="text-muted-foreground text-sm leading-relaxed mb-5 flex-1">{item.desc}</p>
+                <ul className="space-y-2 mb-7">
+                  {item.points.map((p, i) => (
+                    <li key={i} className="flex items-center gap-2 text-sm text-white/70">
+                      <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />
+                      {p}
+                    </li>
+                  ))}
+                </ul>
+                <Button asChild variant="outline" className="border-white/20 hover:bg-white/5 w-full">
+                  <a href={item.href}>{item.cta} →</a>
+                </Button>
               </motion.div>
             ))}
           </div>
@@ -323,7 +415,7 @@ export default function Home() {
               Master Any Technology 🚀
             </h2>
             <p className="text-xl text-muted-foreground">
-              We cover the most demanding Hardware and Software domains to ensure your project stands out.
+              Projects, Industrial Courses, and Internships available across all domains below.
             </p>
           </div>
 
