@@ -606,13 +606,13 @@ export default function Home() {
                   <p className="text-white font-semibold text-sm">Visakhapatnam, Andhra Pradesh, India — 530016</p>
                 </div>
               </div>
-              <a href="https://adoofficial.blogspot.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 group">
+              <a href="https://adofficials.blogspot.com/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 group">
                 <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0 group-hover:bg-primary/20 transition-colors">
                   <Globe className="w-5 h-5 text-primary" />
                 </div>
                 <div>
                   <p className="text-xs text-muted-foreground uppercase tracking-wider">Blog / More</p>
-                  <p className="text-white font-semibold">adoofficial.blogspot.com</p>
+                  <p className="text-white font-semibold">adofficials.blogspot.com</p>
                 </div>
               </a>
             </div>
