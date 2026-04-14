@@ -136,10 +136,6 @@ export default function Admin() {
             </Button>
           </form>
 
-          <p className="text-center text-xs text-muted-foreground mt-6">
-            Default password: <span className="font-mono text-primary">aeipl@admin2024</span>
-            <br />(Set <code className="text-white/60">ADMIN_PASSWORD</code> env variable to change)
-          </p>
         </motion.div>
       </div>
     );

@@ -5,7 +5,7 @@ import { desc } from "drizzle-orm";
 
 const router: IRouter = Router();
 
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD ?? "aeipl@admin2024";
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
 router.get("/admin/submissions", async (req, res) => {
   const { password } = req.query;
