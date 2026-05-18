@@ -8,10 +8,12 @@
     "./schema": "./src/schema/index.ts"
   },
   "scripts": {
-    "push": "drizzle-kit push --config ./drizzle.config.ts",
-    "push-force": "drizzle-kit push --force --config ./drizzle.config.ts"
+    "wake": "node ./wake.mjs",
+    "push": "node ./wake.mjs && drizzle-kit push --config ./drizzle.config.ts",
+    "push-force": "node ./wake.mjs && drizzle-kit push --force --config ./drizzle.config.ts"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^1.1.0",
     "drizzle-orm": "catalog:",
     "drizzle-zod": "^0.8.3",
     "pg": "^8.20.0",
