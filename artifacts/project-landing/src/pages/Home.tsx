@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -29,6 +29,34 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Countdown } from "@/components/countdown";
+
+interface Announcement {
+  id: number;
+  title: string;
+  body: string;
+  imageUrl: string | null;
+  isActive: boolean;
+}
+
+interface Course {
+  id: number;
+  title: string;
+  domain: string;
+  duration: string;
+  fee: string;
+  description: string;
+  highlights: string;
+  imageUrl: string | null;
+  pdfUrl: string | null;
+  isActive: boolean;
+}
+
+interface GalleryItem {
+  id: number;
+  title: string;
+  category: "projects" | "events";
+  imageUrl: string;
+}
 
 const contactSchema = z.object({
   name: z.string().min(2, "Name is required"),
@@ -117,6 +145,26 @@ export default function Home() {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedService, setSelectedService] = useState<string>("");
+  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [gallery, setGallery] = useState<GalleryItem[]>([]);
+  const [galleryTab, setGalleryTab] = useState<"all" | "projects" | "events">("all");
+  const [announcementIdx, setAnnouncementIdx] = useState(0);
+  const [announcementDismissed, setAnnouncementDismissed] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/announcements").then(r => r.json()).then(d => setAnnouncements(d.announcements ?? [])).catch(() => {});
+    fetch("/api/courses").then(r => r.json()).then(d => setCourses(d.courses ?? [])).catch(() => {});
+    fetch("/api/gallery").then(r => r.json()).then(d => setGallery(d.gallery ?? [])).catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    if (announcements.length <= 1) return;
+    const t = setInterval(() => setAnnouncementIdx(i => (i + 1) % announcements.length), 4000);
+    return () => clearInterval(t);
+  }, [announcements.length]);
+
+  const filteredGallery = galleryTab === "all" ? gallery : gallery.filter(g => g.category === galleryTab);
 
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactSchema),
@@ -187,10 +235,15 @@ export default function Home() {
             <a href="#offerings" className="text-sm font-medium text-muted-foreground hover:text-white transition-colors">Offerings</a>
             <a href="#about" className="text-sm font-medium text-muted-foreground hover:text-white transition-colors">About</a>
             <a href="#domains" className="text-sm font-medium text-muted-foreground hover:text-white transition-colors">Domains</a>
+            {courses.length > 0 && (
+              <a href="#courses" className="text-sm font-medium text-muted-foreground hover:text-white transition-colors">Courses</a>
+            )}
+            {gallery.length > 0 && (
+              <a href="#gallery" className="text-sm font-medium text-muted-foreground hover:text-white transition-colors">Gallery</a>
+            )}
             <a href="#offers" className="text-sm font-medium text-primary flex items-center gap-1 animate-pulse">
               <Zap className="w-4 h-4" /> End Offers
             </a>
-            <a href="#services" className="text-sm font-medium text-muted-foreground hover:text-white transition-colors">Services</a>
           </div>
 
           <Button asChild className="rounded-full px-6 bg-primary hover:bg-primary/90 text-white">
@@ -198,6 +251,30 @@ export default function Home() {
           </Button>
         </div>
       </nav>
+
+      {/* Announcements Ticker */}
+      {announcements.length > 0 && !announcementDismissed && (
+        <div className="fixed top-20 left-0 right-0 z-40 bg-primary/95 backdrop-blur-sm border-b border-primary/50 px-4 py-2.5 flex items-center gap-3">
+          <span className="shrink-0 text-white text-xs font-bold uppercase tracking-widest bg-white/20 px-2 py-0.5 rounded">
+            Notice
+          </span>
+          <div className="flex-1 overflow-hidden">
+            <motion.p
+              key={announcementIdx}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              className="text-white text-sm font-medium truncate"
+            >
+              {announcements[announcementIdx]?.title} — {announcements[announcementIdx]?.body}
+            </motion.p>
+          </div>
+          {announcements.length > 1 && (
+            <span className="shrink-0 text-white/60 text-xs">{announcementIdx + 1}/{announcements.length}</span>
+          )}
+          <button onClick={() => setAnnouncementDismissed(true)} className="shrink-0 text-white/70 hover:text-white text-lg leading-none ml-1">×</button>
+        </div>
+      )}
 
       {/* Hero */}
       <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
@@ -346,6 +423,78 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Live Courses Section — only shown when courses exist in DB */}
+      {courses.length > 0 && (
+        <section id="courses" className="py-24 bg-secondary/10 border-y border-white/5">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl md:text-5xl font-display font-bold text-white mb-4">
+                Our Industrial Courses 🎓
+              </h2>
+              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+                Hands-on training programs by industry experts — with lab sessions and completion certificates.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {courses.map((course, idx) => (
+                <motion.div
+                  key={course.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: idx * 0.07 }}
+                  className="bg-glass-card rounded-3xl border border-white/10 overflow-hidden flex flex-col hover-glow"
+                >
+                  {course.imageUrl ? (
+                    <img src={course.imageUrl} alt={course.title} className="w-full h-44 object-cover" />
+                  ) : (
+                    <div className="w-full h-44 bg-gradient-to-br from-primary/20 to-orange-500/10 flex items-center justify-center">
+                      <GraduationCap className="w-14 h-14 text-primary/40" />
+                    </div>
+                  )}
+                  <div className="p-6 flex flex-col flex-1">
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-primary/15 text-primary border border-primary/20">
+                        {course.domain}
+                      </span>
+                    </div>
+                    <h3 className="text-lg font-bold text-white mb-2">{course.title}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed mb-4 flex-1">{course.description}</p>
+                    {course.highlights && (
+                      <ul className="space-y-1.5 mb-4">
+                        {course.highlights.split("\n").filter(Boolean).slice(0, 3).map((h, i) => (
+                          <li key={i} className="flex items-center gap-2 text-xs text-white/70">
+                            <CheckCircle2 className="w-3.5 h-3.5 text-primary shrink-0" />{h.trim()}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                    <div className="flex items-center justify-between text-sm mb-5 pt-3 border-t border-white/5">
+                      <span className="text-muted-foreground flex items-center gap-1.5">
+                        <Clock className="w-4 h-4" /> {course.duration}
+                      </span>
+                      <span className="text-primary font-bold text-base">{course.fee}</span>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button asChild className="flex-1 bg-primary hover:bg-primary/90 text-white rounded-xl">
+                        <a href="#contact">Enroll Now →</a>
+                      </Button>
+                      {course.pdfUrl && (
+                        <Button asChild variant="outline" className="border-white/15 hover:bg-white/5 rounded-xl px-3">
+                          <a href={course.pdfUrl} target="_blank" rel="noopener noreferrer">
+                            <BookOpen className="w-4 h-4" />
+                          </a>
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* About Section */}
       <section id="about" className="py-24 relative">
@@ -564,6 +713,69 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Gallery Section — only shown when gallery images exist in DB */}
+      {gallery.length > 0 && (
+        <section id="gallery" className="py-24 bg-secondary/10 border-y border-white/5">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-5xl font-display font-bold text-white mb-4">
+                Our Gallery 📸
+              </h2>
+              <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
+                Real projects, real events, real results.
+              </p>
+              <div className="flex items-center justify-center gap-2">
+                {(["all", "projects", "events"] as const).map(tab => (
+                  <button
+                    key={tab}
+                    onClick={() => setGalleryTab(tab)}
+                    className={`px-5 py-2 rounded-full text-sm font-semibold transition-all capitalize ${
+                      galleryTab === tab
+                        ? "bg-primary text-white shadow-lg shadow-primary/25"
+                        : "bg-white/5 text-muted-foreground hover:bg-white/10 border border-white/10"
+                    }`}
+                  >
+                    {tab === "all" ? "All" : tab === "projects" ? "Projects" : "Events"}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <motion.div
+              key={galleryTab}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4"
+            >
+              {filteredGallery.map((item, idx) => (
+                <motion.div
+                  key={item.id}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: idx * 0.04 }}
+                  className="break-inside-avoid rounded-2xl overflow-hidden border border-white/10 group relative"
+                >
+                  <img
+                    src={item.imageUrl}
+                    alt={item.title}
+                    className="w-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
+                    <div>
+                      <p className="text-white text-sm font-semibold leading-tight">{item.title}</p>
+                      <span className="text-xs text-primary capitalize">{item.category}</span>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+            {filteredGallery.length === 0 && (
+              <p className="text-center text-muted-foreground py-12">No images in this category yet.</p>
+            )}
+          </div>
+        </section>
+      )}
 
       {/* Contact / Enquiry Form */}
       <section id="contact" className="py-24 relative bg-secondary/10 border-t border-white/5">
