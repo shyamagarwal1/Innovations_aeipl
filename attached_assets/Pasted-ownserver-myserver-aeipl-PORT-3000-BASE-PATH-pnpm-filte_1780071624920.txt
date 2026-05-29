@@ -1,0 +1,34 @@
+ownserver@myserver:~/aeipl $ PORT=3000 BASE_PATH=/ pnpm --filter @workspace/project-landing run build
+
+> @workspace/project-landing@0.0.0 build /home/ownserver/aeipl/artifacts/project-landing
+> vite build --config vite.config.ts
+
+vite v7.3.3 building client environment for production...
+src/components/ui/tooltip.tsx (2:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+src/components/ui/select.tsx (2:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+✓ 2231 modules transformed.
+dist/public/index.html                   1.08 kB │ gzip:   0.60 kB
+dist/public/assets/index-Bg3HGGa6.css  125.20 kB │ gzip:  19.37 kB
+dist/public/assets/index-DnVa98O7.js   650.49 kB │ gzip: 199.57 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 17.85s
+ownserver@myserver:~/aeipl $ sudo systemctl restart aeipl.service
+ownserver@myserver:~/aeipl $ sudo systemctl status aeipl.service --no-pager
+● aeipl.service - AEIPL Website API
+     Loaded: loaded (/etc/systemd/system/aeipl.service; enabled; preset: enabled)
+     Active: active (running) since Fri 2026-05-29 21:47:30 IST; 11s ago
+ Invocation: 23890683a1ba4eeea4bebcaea24cff04
+   Main PID: 13233 (node)
+      Tasks: 11 (limit: 3967)
+        CPU: 1.550s
+     CGroup: /system.slice/aeipl.service
+             └─13233 /usr/bin/node artifacts/api-server/dist/index.mjs
+
+May 29 21:47:30 myserver systemd[1]: Started aeipl.service - AEIPL Website API.
+May 29 21:47:31 myserver node[13233]: {"level":30,"time":1780071451582,"pid":13233,"hostname":"myserver","port"…tening"}
+Hint: Some lines were ellipsized, use -l to show in full.
+ownserver@myserver:~/aeipl $
