@@ -58,20 +58,17 @@ const TABS = [
 // ── File Upload Helper ─────────────────────────────────────────────────────────
 
 async function uploadFile(file: File): Promise<string> {
-  const metaRes = await fetch("/api/storage/uploads/request-url", {
+  const res = await fetch("/api/storage/upload", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ name: file.name, size: file.size, contentType: file.type }),
-  });
-  if (!metaRes.ok) throw new Error("Failed to get upload URL");
-  const { uploadURL, objectPath } = await metaRes.json();
-  const putRes = await fetch(uploadURL, {
-    method: "PUT",
     headers: { "Content-Type": file.type },
     body: file,
   });
-  if (!putRes.ok) throw new Error("Failed to upload file");
-  return `/api/storage${objectPath}`;
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: "Upload failed" }));
+    throw new Error(err.error ?? "Failed to upload file");
+  }
+  const { url } = await res.json();
+  return url;
 }
 
 // ── FileUploadButton ──────────────────────────────────────────────────────────

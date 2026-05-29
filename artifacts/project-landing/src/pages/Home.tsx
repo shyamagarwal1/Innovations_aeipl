@@ -252,27 +252,19 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* Announcements Ticker */}
+      {/* Announcements Ticker — scrolling top bar */}
       {announcements.length > 0 && !announcementDismissed && (
-        <div className="fixed top-20 left-0 right-0 z-40 bg-primary/95 backdrop-blur-sm border-b border-primary/50 px-4 py-2.5 flex items-center gap-3">
+        <div className="fixed top-20 left-0 right-0 z-40 bg-primary/95 backdrop-blur-sm border-b border-primary/50 px-4 py-2 flex items-center gap-3">
           <span className="shrink-0 text-white text-xs font-bold uppercase tracking-widest bg-white/20 px-2 py-0.5 rounded">
-            Notice
+            📢 Notice
           </span>
           <div className="flex-1 overflow-hidden">
-            <motion.p
-              key={announcementIdx}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              className="text-white text-sm font-medium truncate"
-            >
-              {announcements[announcementIdx]?.title} — {announcements[announcementIdx]?.body}
+            <motion.p key={announcementIdx} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} className="text-white text-sm font-medium truncate">
+              <strong>{announcements[announcementIdx]?.title}</strong> — {announcements[announcementIdx]?.body}
             </motion.p>
           </div>
-          {announcements.length > 1 && (
-            <span className="shrink-0 text-white/60 text-xs">{announcementIdx + 1}/{announcements.length}</span>
-          )}
-          <button onClick={() => setAnnouncementDismissed(true)} className="shrink-0 text-white/70 hover:text-white text-lg leading-none ml-1">×</button>
+          {announcements.length > 1 && <span className="shrink-0 text-white/60 text-xs">{announcementIdx + 1}/{announcements.length}</span>}
+          <button onClick={() => setAnnouncementDismissed(true)} className="shrink-0 text-white/70 hover:text-white text-xl leading-none">×</button>
         </div>
       )}
 
@@ -340,6 +332,48 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Announcements Section — full cards, visible to all */}
+      {announcements.length > 0 && (
+        <section id="announcements" className="py-16 bg-background">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center gap-3 mb-10">
+              <div className="w-10 h-10 rounded-xl bg-primary/15 border border-primary/30 flex items-center justify-center shrink-0">
+                <Zap className="w-5 h-5 text-primary" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-display font-bold text-white">Latest Announcements</h2>
+                <p className="text-sm text-muted-foreground">Important updates from AEIPL</p>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {announcements.map((ann, idx) => (
+                <motion.div
+                  key={ann.id}
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: idx * 0.08 }}
+                  className="bg-glass-card rounded-2xl border border-primary/20 overflow-hidden flex flex-col"
+                >
+                  {ann.imageUrl && (
+                    <img src={ann.imageUrl} alt={ann.title} className="w-full h-48 object-cover" />
+                  )}
+                  <div className="p-6 flex flex-col flex-1">
+                    <div className="flex items-start gap-3 mb-3">
+                      <div className="w-8 h-8 rounded-lg bg-primary/15 border border-primary/20 flex items-center justify-center shrink-0 mt-0.5">
+                        <Zap className="w-4 h-4 text-primary" />
+                      </div>
+                      <h3 className="text-white font-bold text-lg leading-tight">{ann.title}</h3>
+                    </div>
+                    <p className="text-muted-foreground text-sm leading-relaxed">{ann.body}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* What We Offer */}
       <section id="offerings" className="py-24 bg-background">

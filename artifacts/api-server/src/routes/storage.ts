@@ -12,6 +12,17 @@ const RequestUploadUrlBody = z.object({
   contentType: z.string(),
 });
 
+router.post("/storage/upload", async (req: Request, res: Response) => {
+  const contentType = ((req.headers["content-type"] ?? "application/octet-stream").split(";")[0]).trim();
+  try {
+    const objectPath = await objectStorageService.uploadObjectStream(req, contentType);
+    res.json({ objectPath, url: `/api/storage${objectPath}` });
+  } catch (error) {
+    req.log.error({ err: error }, "Error uploading object");
+    res.status(500).json({ error: "Failed to upload file" });
+  }
+});
+
 router.post("/storage/uploads/request-url", async (req: Request, res: Response) => {
   const parsed = RequestUploadUrlBody.safeParse(req.body);
   if (!parsed.success) {

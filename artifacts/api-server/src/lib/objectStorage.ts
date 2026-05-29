@@ -175,6 +175,28 @@ export class ObjectStorageService {
     return `/objects/${entityId}`;
   }
 
+  async uploadObjectStream(
+    stream: NodeJS.ReadableStream,
+    contentType: string
+  ): Promise<string> {
+    const privateObjectDir = this.getPrivateObjectDir();
+    const objectId = randomUUID();
+    const fullPath = `${privateObjectDir}/uploads/${objectId}`;
+    const { bucketName, objectName } = parseObjectPath(fullPath);
+    const bucket = objectStorageClient.bucket(bucketName);
+    const file = bucket.file(objectName);
+    await new Promise<void>((resolve, reject) => {
+      const writeStream = file.createWriteStream({
+        metadata: { contentType },
+        resumable: false,
+      });
+      stream.pipe(writeStream);
+      writeStream.on("finish", resolve);
+      writeStream.on("error", reject);
+    });
+    return `/objects/uploads/${objectId}`;
+  }
+
   async trySetObjectEntityAclPolicy(
     rawPath: string,
     aclPolicy: ObjectAclPolicy
@@ -262,6 +284,6 @@ async function signObjectURL({
     );
   }
 
-  const { signed_url: signedURL } = await response.json();
-  return signedURL;
+  const data = await response.json() as { signed_url: string };
+  return data.signed_url;
 }
