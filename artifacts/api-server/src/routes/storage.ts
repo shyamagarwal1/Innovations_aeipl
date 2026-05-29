@@ -15,7 +15,16 @@ const RequestUploadUrlBody = z.object({
 router.post("/storage/upload", async (req: Request, res: Response) => {
   const contentType = ((req.headers["content-type"] ?? "application/octet-stream").split(";")[0]).trim();
   try {
-    const objectPath = await objectStorageService.uploadObjectStream(req, contentType);
+    const chunks: Buffer[] = [];
+    await new Promise<void>((resolve, reject) => {
+      req.on("data", (chunk) => chunks.push(Buffer.from(chunk)));
+      req.on("end", resolve);
+      req.on("error", reject);
+    });
+    const buffer = Buffer.concat(chunks);
+    req.log.info({ contentType, sizeBytes: buffer.length }, "Upload received, saving to storage");
+    const objectPath = await objectStorageService.uploadBuffer(buffer, contentType);
+    req.log.info({ objectPath }, "Upload saved successfully");
     res.json({ objectPath, url: `/api/storage${objectPath}` });
   } catch (error) {
     req.log.error({ err: error }, "Error uploading object");
@@ -42,7 +51,8 @@ router.post("/storage/uploads/request-url", async (req: Request, res: Response) 
 
 router.get("/storage/public-objects/*filePath", async (req: Request, res: Response) => {
   try {
-    const filePath = (req.params as any).filePath as string;
+    const raw = (req.params as any).filePath;
+    const filePath = Array.isArray(raw) ? raw.join("/") : (raw as string);
     const file = await objectStorageService.searchPublicObject(filePath);
     if (!file) { res.status(404).json({ error: "Object not found" }); return; }
     const response = await objectStorageService.downloadObject(file);
@@ -57,7 +67,9 @@ router.get("/storage/public-objects/*filePath", async (req: Request, res: Respon
 
 router.get("/storage/objects/*objectPath", async (req: Request, res: Response) => {
   try {
-    const objectPath = `/objects/${(req.params as any).objectPath}`;
+    const rawParam = (req.params as any).objectPath;
+    const paramStr = Array.isArray(rawParam) ? rawParam.join("/") : (rawParam as string);
+    const objectPath = `/objects/${paramStr}`;
     const file = await objectStorageService.getObjectEntityFile(objectPath);
     const response = await objectStorageService.downloadObject(file);
     res.setHeader("Content-Type", response.headers.get("Content-Type") ?? "application/octet-stream");

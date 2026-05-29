@@ -175,8 +175,8 @@ export class ObjectStorageService {
     return `/objects/${entityId}`;
   }
 
-  async uploadObjectStream(
-    stream: NodeJS.ReadableStream,
+  async uploadBuffer(
+    buffer: Buffer,
     contentType: string
   ): Promise<string> {
     const privateObjectDir = this.getPrivateObjectDir();
@@ -185,14 +185,9 @@ export class ObjectStorageService {
     const { bucketName, objectName } = parseObjectPath(fullPath);
     const bucket = objectStorageClient.bucket(bucketName);
     const file = bucket.file(objectName);
-    await new Promise<void>((resolve, reject) => {
-      const writeStream = file.createWriteStream({
-        metadata: { contentType },
-        resumable: false,
-      });
-      stream.pipe(writeStream);
-      writeStream.on("finish", resolve);
-      writeStream.on("error", reject);
+    await file.save(buffer, {
+      metadata: { contentType },
+      resumable: false,
     });
     return `/objects/uploads/${objectId}`;
   }
